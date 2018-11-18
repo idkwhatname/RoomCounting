@@ -47,8 +47,6 @@ public class AddSession extends HttpServlet {
 					"/Creation Menu.jsp");
 			rd.forward(request, response);
 		}else {
-			MongoClient mongo = (MongoClient) request.getServletContext()
-					.getAttribute("MONGO_CLIENT");
 			
 			//Test prints
 			System.out.println(sessionName);
@@ -59,33 +57,16 @@ public class AddSession extends HttpServlet {
 			
 			//ADDING SESSION TO DATABASE
 	        Database_Init_Interface dbi = new Database_Init_Interface();
+	        
+	        //TODO: get room and timeslot id and push to session document
 	        dbi.pushSessionDocument(sessionName, sessionID, speakerName, "", "");
 	        
-	        
-	        //--------THIS CODE NEEDS TO BE MOVED TO A SEPERATE CLASS--------------
-			
-			//GETTING ALL THE SESSIONS FROM THE DATBASE
-			Util util = new Util(mongo, "Sessions");
-			List<Session> AllSessions = util.readAllSessions();
-			
-			
-			//GETTING ALL THE TIME SLOTS FROM THE DATABASE
-			Util utilTime = new Util(mongo, "TimeSlots");
-			List<TimeSlot> AllTimeSlots = utilTime.readAllTimeSlots();
-			
-			//GETTING ALL THE ROOMS FROM THE DATBASE
-			Util utilRoom = new Util(mongo, "Rooms");
-			List<Room> AllRooms = utilRoom.readAllRooms();
 			
 			//SHOWING THE LSIT ON THE WEBSITE
-			request.setAttribute("timeSlots", AllTimeSlots);
-			request.setAttribute("rooms", AllRooms);
-			request.setAttribute("sessions", AllSessions);
+			request.setAttribute("timeSlots", dbi.getTimeSlotList());
+			request.setAttribute("rooms", dbi.getRoomList());
+			request.setAttribute("sessions", dbi.getSessionList());
 	        
-			//----------------------END CODE----------------------------------------
-	        
-
-			
 			
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
