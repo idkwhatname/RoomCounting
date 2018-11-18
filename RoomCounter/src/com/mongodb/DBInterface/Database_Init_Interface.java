@@ -80,6 +80,28 @@ public class Database_Init_Interface extends DatabaseInterface{
 		return pushDocument("TimeSlot" , newTimeSlotDoc);
 	}
 	
+	private boolean deleteDocument(Document doc , String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			collection.deleteOne(doc);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean deleteSession(String sessionId) {
+		return deleteDocument(new Document("sessionId", sessionId) , "Session");
+	}
+	
+	public boolean deleteRoom(String roomId) {
+		return deleteDocument(new Document("roomId", roomId) , "Room");
+	}
+	
+	public boolean deleteTimeSlot(String timeSlotId) {
+		return deleteDocument(new Document("timeSlotId", timeSlotId) , "TimeSlot");
+	}
+	
 	
 
 	
