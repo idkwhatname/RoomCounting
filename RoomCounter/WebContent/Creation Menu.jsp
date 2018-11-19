@@ -91,8 +91,8 @@
 				</div> 	
 
 				<br>
-				<button class="btn" type="submit" value="Submit">Modify</button>
-				<button class="btn" type="submit" value="Submit">Delete</button>
+				<button class="btn" name="myButton" type="submit" value="modify">Modify</button>
+				<button class="btn" name="myButton" type="submit" value="delete">Delete</button>
 			</div>
 			</form>
 		</div>

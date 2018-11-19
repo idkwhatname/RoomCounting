@@ -1,6 +1,8 @@
 package com.mongodb.DBInterface;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 import com.mongodb.*;
 import com.mongodb.client.FindIterable;
@@ -101,31 +103,51 @@ private static MongoClient getConnection(String url , int port_num) {
 		return true;
 	}
 	
-	/*
-	
-	private boolean isNewSession(String roomName , MongoCollection<Document> col) {
-        FindIterable<Document> cursor = col.find(eq("roomName", roomName));
-        for(Document doc : cursor){
-            return false;
+	private boolean deleteDocument(Document doc , String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			collection.deleteOne(doc);
+		} catch (Exception e) {
+			return false;
 		}
 		return true;
 	}
+	
+	private boolean updateRoom(Document doc,String name,String capacity, String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			if(name != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("roomName", name)));
+			}
+			if(capacity != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("capacity", capacity)));
+			}
 
-	private boolean isNewTimeSlot(int startTime , int endTime , MongoCollection<Document> col) {
-    	FindIterable<Document> cursor = col.find(and(eq("startTime", startTime) , eq("endTime" , endTime)));
-        for(Document doc : cursor){
-            return false;
+		}catch (Exception e) {
+			return false;
 		}
 		return true;
 	}
 	
-    private boolean isNewRoom(String sessionID , MongoCollection<Document> col) {
-        FindIterable<Document> cursor = col.find(eq("sessionID", sessionID));
-        for(Document doc : cursor){
-            return false;
-		}
-		return true;
-    }
-    */
+	public boolean deleteSession(String sessionId) {
+		return deleteDocument(new Document("_id", new ObjectId(sessionId)) , "Sessions");
+	}
+	
+	public boolean deleteRoom(String roomId) {
+		return deleteDocument(new Document("_id", new ObjectId(roomId)) , "Rooms");
+	}
+	
+	public boolean deleteTimeSlot(String timeSlotId) {
+		return deleteDocument(new Document("_id", new ObjectId(timeSlotId)), "TimeSlots");
+	}
+	
+	
+	public boolean updateRoom(String roomId,String name, String capactity) {
+		return updateRoom(new Document("_id", new ObjectId(roomId)), name, capactity, "Rooms" );
+	}
 
 }
