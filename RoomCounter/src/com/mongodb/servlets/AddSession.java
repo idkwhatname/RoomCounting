@@ -62,7 +62,6 @@ public class AddSession extends HttpServlet {
 	        dbi.pushSessionDocument(sessionName, sessionID, speakerName, "", "");
 	        
 	        
-	        //--------THIS CODE NEEDS TO BE MOVED TO A SEPERATE CLASS--------------
 			
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
 			Util util = new Util(mongo, "Sessions");
@@ -82,7 +81,6 @@ public class AddSession extends HttpServlet {
 			request.setAttribute("rooms", AllRooms);
 			request.setAttribute("sessions", AllSessions);
 	        
-			//----------------------END CODE----------------------------------------
 	        
 
 			

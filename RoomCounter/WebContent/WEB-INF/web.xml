@@ -12,12 +12,12 @@
   <welcome-file-list>
     <welcome-file>Creation Menu.jsp</welcome-file>
   </welcome-file-list>
-      <servlet>
-        <servlet-name>Home</servlet-name>
-        <servlet-class>com.mongodb.servlets.MainServlet</servlet-class>
-    </servlet>
+  <servlet>
+    <servlet-name>Home</servlet-name>
+    <servlet-class>com.mongodb.servlets.MainServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
-        <servlet-name>Home</servlet-name>
-        <url-pattern></url-pattern>
-    </servlet-mapping>
+    <servlet-name>Home</servlet-name>
+    <url-pattern></url-pattern>
+  </servlet-mapping>
 </web-app>

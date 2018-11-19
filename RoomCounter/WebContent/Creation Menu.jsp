@@ -35,6 +35,7 @@
          	<c:url value="/addSession" var="addSessionURL"></c:url>
          	<c:url value="/addTimeSlot" var="addTimeSlotURL"></c:url>
          	<c:url value="/addRoomSlot" var="addRoomSlotURL"></c:url>
+         	<c:url value="/editRoomSlot" var="editRoomSlotURL"></c:url>
          
 
 <div class="row">
@@ -50,9 +51,9 @@
 					<span class="heading-text-1">Add Time Slot:</span>
 				</h4>
 				<span class="text-element small-heading">Start Time:<br></span>
-				<input name="start" type="text"> <span
+				<input name="start" type="time"> <span
 					class="text-element small-heading">End Time:<br></span> <input
-					name="end" type="text"> <br> <br>
+					name="end" type="time"> <br> <br>
 				<button type="submit" class="btn" value="Submit">Submit</button>
 			</form>
 			<div class="current-db-container">
@@ -79,19 +80,21 @@
 					name="capacity" type="number" class="input-1"> <br> <br>
 				<button type="submit" class="btn" value="Submit">Submit</button>
 			</form>
+			<form class="forms" id="roomListForm" action='<c:out value="${editRoomSlotURL}"></c:out>' method="POST">
 			<div class="current-db-container">
 				<div id="curRooms" class="current-db" style="height: 225px;">
-				<select id="roomSelect" class="dynam-select" multiple>
+				<select name="roomSelect" id="roomSelect" class="dynam-select" multiple>
                 <c:forEach items="${requestScope.rooms}" var="room">
-                <option value="${room.roomID}">Room Name: ${room.name}, Capacity: ${room.capacity}</option><br>          
+                <option value="${room.roomID}">Room Name: ${room.name}, Capacity: ${room.capacity} </option><br>          
                 </c:forEach>
                 </select>
 				</div> 	
 
 				<br>
-				<button class="btn" onclick="modifyRoom()">Modify</button>
-				<button class="btn" onclick="deleteRoom()">Delete</button>
+				<button class="btn" type="submit" value="Submit">Modify</button>
+				<button class="btn" type="submit" value="Submit">Delete</button>
 			</div>
+			</form>
 		</div>
 	</div>
 

@@ -53,7 +53,6 @@ public class AddTime extends HttpServlet {
 			Database_Init_Interface dbi = new Database_Init_Interface();
 			dbi.pushTimeslotDocument("0", startTime, endTime);
 			
-			//--------THIS CODE NEEDS TO BE MOVED TO A SEPERATE CLASS--------------
 			
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
 			Util util = new Util(mongo, "Sessions");
@@ -73,7 +72,6 @@ public class AddTime extends HttpServlet {
 			request.setAttribute("rooms", AllRooms);
 			request.setAttribute("sessions", AllSessions);
 	        
-			//----------------------END CODE----------------------------------------
 
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);

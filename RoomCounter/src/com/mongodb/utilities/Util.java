@@ -7,7 +7,6 @@ import java.util.List;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import com.mongodb.models.ModelConverter;
 import com.mongodb.models.*;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBCollection;
@@ -63,5 +62,6 @@ public class Util {
 		
 		return timeslots;
 	}
+	
 
 }
