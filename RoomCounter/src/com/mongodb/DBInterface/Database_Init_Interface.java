@@ -6,6 +6,7 @@ import com.mongodb.*;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.models.*;
 
 public class Database_Init_Interface extends DatabaseInterface{
 	// private MongoDatabase _db = getConnection().getDatabase(database_name);
@@ -90,18 +91,37 @@ public class Database_Init_Interface extends DatabaseInterface{
 		return true;
 	}
 
-	public boolean deleteSession(String sessionId) {
+	public boolean deleteSessionById(String sessionId) {
 		return deleteDocument(new Document("sessionId", sessionId) , "Session");
 	}
 	
-	public boolean deleteRoom(String roomId) {
+	public boolean deleteRoomById(String roomId) {
 		return deleteDocument(new Document("roomId", roomId) , "Room");
 	}
 	
-	public boolean deleteTimeSlot(String timeSlotId) {
+	public boolean deleteTimeSlotById(String timeSlotId) {
 		return deleteDocument(new Document("timeSlotId", timeSlotId) , "TimeSlot");
 	}
 	
+	public boolean deleteSessionByName(String sessionName) {
+		return deleteDocument(new Document("sessionName", sessionName) , "Session");
+	}
+	
+	public boolean deleteRoomByName(String roomName) {
+		return deleteDocument(new Document("roomName", roomName) , "Room");
+	}
+	
+	public boolean deleteRoomByObj(Room room) {
+		return deleteDocument(new Document("roomId" , room.getRoomID()) , "Room");
+	}
+	
+	public boolean deleteTimeSlotByObj(TimeSlot ts) {
+		return deleteDocument(new Document("timeSlotId" , ts.getTimeSlotID()) , "TimeSlot");
+	}
+	
+	public boolean deleteSessionByObj(Session session) {
+		return deleteDocument(new Document("sessionId" , session.getSessionID()) , "Session");
+	}
 	
 
 	

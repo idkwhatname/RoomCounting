@@ -8,6 +8,9 @@ public class Session {
 	private String speaker;
 	private String timeSlot;
 	private String room;
+	private String countBeg;
+	private String countMid;
+	private String countEnd;
 	
 	public void setSessionID(String id) {
 		sessionID = id;
@@ -34,6 +37,18 @@ public class Session {
 		room = r;
 	}
 	
+	public void setCountBeg(String c) {
+		countBeg = c;
+	}
+	
+	public void setCountMid(String c) {
+		countMid = c;
+	}
+	
+	public void setCountEnd(String c) {
+		countEnd = c;
+	}
+	
 	public String getSessionName() {
 		return sessionName;
 	}
@@ -50,6 +65,17 @@ public class Session {
 	}
 	public String getRoom() {
 		return room;
+	}
+	
+	public String getCountBeg() {
+		return countBeg;
+	}
+	
+	public String getCountMid() {
+		return countMid;
+	}
+	public String getCountEnd() {
+		return countEnd;
 	}
 
 }
