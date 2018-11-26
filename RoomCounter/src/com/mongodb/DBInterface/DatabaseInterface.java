@@ -20,7 +20,7 @@ import java.util.List;
 
 public class DatabaseInterface {
 
-	private String DB_NAME = "";
+	private String DB_NAME = "Database";
 	private MongoDatabase db;
 
 	public DatabaseInterface(String url , int port){
