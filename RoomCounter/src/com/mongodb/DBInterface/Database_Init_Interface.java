@@ -9,145 +9,78 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class Database_Init_Interface extends DatabaseInterface{
-    //private MongoDatabase _db = getConnection().getDatabase(database_name);
-	//private MongoCollection _col = db.getCollection(database_collection);
-	
-	private String DB_NAME = "Database";
+public class Database_Init_Interface extends DatabaseEditableInterface{
 	private MongoDatabase db;
-	
+	private int nextRoomId = 0;
+	private int nextTimeId = 0;
+
 	public Database_Init_Interface(String url , int port) {
-		db = getConnection(url , port).getDatabase(DB_NAME);
+		super(url , port);
+		db = super.getDB();
 	}
-	
+
 	public Database_Init_Interface(){
-		this("localhost" , 27017);
+		super();
+		db = super.getDB();
 	}
-	
-private static MongoClient getConnection(String url , int port_num) {
-        
-        MongoClient mongoClntObj = new MongoClient(url, port_num);
-        return mongoClntObj;
-	}
-	
-	public boolean pushSessionDocument(String sessionName , String id , String speaker , String roomId , String timeSlotId) {
 
-		MongoCollection<Document> sessionColl = db.getCollection("Sessions");
-
-		//check and convert ints
-		/*
-		if(!isNewRoom(id , sessionColl)){
-			return false;
-		}
-		*/
-
-        Document newSessionDoc = new Document("sessionID" , id).append(
-				"sessionName" , sessionName
-			).append(
-				"speakerName" , speaker
-			).append(
-				"roomId" , roomId
-			).append(
-				"timeSlotId" , timeSlotId
-			);
-
-		
-		sessionColl.insertOne(newSessionDoc);
-		
-		return true;
-	}
-	
-	public boolean pushRoomDocument(String roomName , String id , String capacity) {
-		
-		MongoCollection<Document> roomColl = db.getCollection("Rooms");
-
-		//check and convert ints
-
-		/*
-		if(!isNewRoom(roomName , roomColl)){
-			return false;
-		}
-		*/
-
-        Document newRoomDoc = new Document("roomID" , id).append(
-				"roomName" , roomName
-			).append(
-				"capacity" , capacity
-			);
-
-		roomColl.insertOne(newRoomDoc);
-		
-		return true;
-	}
-	
-	public boolean pushTimeslotDocument(String id , String startTime , String endTime) {
-		
-		MongoCollection<Document> timeSlotColl = db.getCollection("TimeSlots");
-
-		//check and convert to epoch
-		
-		/*
-		if(!isNewTimeSlot(startTime_int , endTime_int , timeSlotColl)){
-			return false;
-		}
-		*/
-
-        Document newTimeSlotDoc = new Document("timeSlotId" , id).append(
-				"startTime" , startTime
-			).append(
-				"endTime" , endTime
-			);
-
-        timeSlotColl.insertOne(newTimeSlotDoc);
-		
-		return true;
-	}
-	
-	private boolean deleteDocument(Document doc , String collectionName) {
-		MongoCollection<Document> collection = db.getCollection(collectionName);
-		try {
-			collection.deleteOne(doc);
-		} catch (Exception e) {
+	private boolean pushDocument(String collectionName, Document doc ){
+		MongoCollection<Document> coll = db.getCollection(collectionName);
+		try{
+			coll.insertOne(doc);
+		} catch (Exception e){
 			return false;
 		}
 		return true;
+		
 	}
-	
-	private boolean updateRoom(Document doc,String name,String capacity, String collectionName) {
-		MongoCollection<Document> collection = db.getCollection(collectionName);
-		try {
-			if(name != null) {
-				collection.updateOne(
-					    new BasicDBObject(doc),
-					    new BasicDBObject("$set", new BasicDBObject("roomName", name)));
-			}
-			if(capacity != null) {
-				collection.updateOne(
-					    new BasicDBObject(doc),
-					    new BasicDBObject("$set", new BasicDBObject("capacity", capacity)));
-			}
 
-		}catch (Exception e) {
-			return false;
-		}
-		return true;
+	public boolean pushSessionDocument(String sessionName, String id, String speaker, String roomId,
+			String timeSlotId) {
+
+
+		// if (!isNewRoom(id, sessionColl)) {
+		// 	return false;
+		// }
+
+		Document newSessionDoc = new Document("sessionID", id).append("sessionName", sessionName)
+				.append("speakerName", speaker).append("roomId", roomId).append("timeSlotId", timeSlotId);
+
+		return pushDocument("Session" , newSessionDoc);
+	}
+
+	public boolean pushRoomDocument(String roomName, String capacity) {
+
+		int id = nextRoomId;
+		nextRoomId++;
+
+		// check and convert ints
+
+		// if (!isNewRoom(roomName, roomColl)) {
+		// 	return false;
+		// }
+
+		Document newRoomDoc = new Document("roomID", id).append("roomName", roomName).append("capacity", capacity);
+
+		return pushDocument("Room" , newRoomDoc);
+	}
+
+	public boolean pushTimeslotDocument(String startTime, String endTime) {
+
+		int id = nextTimeId;
+		nextTimeId++;
+
+		// if (!isNewTimeSlot(startTime_int, endTime_int, timeSlotColl)) {
+		// 	return false;
+		// }
+
+		Document newTimeSlotDoc = new Document("timeSlotId", id).append("startTime", startTime).append("capacity",
+				endTime);
+
+		return pushDocument("TimeSlot" , newTimeSlotDoc);
 	}
 	
-	public boolean deleteSession(String sessionId) {
-		return deleteDocument(new Document("_id", new ObjectId(sessionId)) , "Sessions");
-	}
-	
-	public boolean deleteRoom(String roomId) {
-		return deleteDocument(new Document("_id", new ObjectId(roomId)) , "Rooms");
-	}
-	
-	public boolean deleteTimeSlot(String timeSlotId) {
-		return deleteDocument(new Document("_id", new ObjectId(timeSlotId)), "TimeSlots");
-	}
 	
 	
-	public boolean updateRoom(String roomId,String name, String capactity) {
-		return updateRoom(new Document("_id", new ObjectId(roomId)), name, capactity, "Rooms" );
-	}
 
 }
