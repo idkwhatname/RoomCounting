@@ -9,7 +9,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-public class Database_Init_Interface extends DatabaseEditableInterface{
+public class Database_Init_Interface extends DatabaseUpdateSessionInterface{
 	private MongoDatabase db;
 	private int nextRoomId = 0;
 	private int nextTimeId = 0;
@@ -80,7 +80,86 @@ public class Database_Init_Interface extends DatabaseEditableInterface{
 		return pushDocument("TimeSlot" , newTimeSlotDoc);
 	}
 	
+	private boolean deleteDocument(Document doc , String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			collection.deleteOne(doc);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 	
+	private boolean updateRoom(Document doc,String name,String capacity, String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			if(name != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("roomName", name)));
+			}
+			if(capacity != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("capacity", capacity)));
+			}
+
+		}catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean updateSession(Document doc,String name,String begCount, String midCount , String endCount) {
+		MongoCollection<Document> collection = db.getCollection("Sessions");
+		try {
+			if(name != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("sessionName", name)));
+			}
+			if(begCount != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("beginningCount", begCount)));
+			}
+			if(midCount != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("middleCount", midCount)));
+			}
+			if(endCount != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("endCount", endCount)));
+			}
+
+		}catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean deleteSession(String sessionId) {
+		return deleteDocument(new Document("_id", new ObjectId(sessionId)) , "Sessions");
+	}
+	
+	public boolean deleteRoom(String roomId) {
+		return deleteDocument(new Document("_id", new ObjectId(roomId)) , "Rooms");
+	}
+	
+	public boolean deleteTimeSlot(String timeSlotId) {
+		return deleteDocument(new Document("_id", new ObjectId(timeSlotId)), "TimeSlots");
+	}
+	
+	
+	public boolean updateRoom(String roomId,String name, String capactity) {
+		return updateRoom(new Document("_id", new ObjectId(roomId)), name, capactity, "Rooms" );
+	}
+	
+	public boolean updateSession(String sessionId , String name,String begCount, String midCount , String endCount) {
+		return updateSession(new Document("_id", new ObjectId(sessionId)), name, begCount, midCount , endCount );
+	}
 	
 
 }
