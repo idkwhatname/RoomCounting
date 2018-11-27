@@ -51,26 +51,13 @@ public class AddTime extends HttpServlet {
 			//ADDING THE TIME SLOT TO THE DATABASE
 			
 			Database_Init_Interface dbi = new Database_Init_Interface();
-			dbi.pushTimeslotDocument("0", startTime, endTime);
+			dbi.pushTimeslotDocument(startTime, endTime);
 			
-			
-			//GETTING ALL THE SESSIONS FROM THE DATBASE
-			Util util = new Util(mongo, "Sessions");
-			List<Session> AllSessions = util.readAllSessions();
-			
-			
-			//GETTING ALL THE TIME SLOTS FROM THE DATABASE
-			Util utilTime = new Util(mongo, "TimeSlots");
-			List<TimeSlot> AllTimeSlots = utilTime.readAllTimeSlots();
-			
-			//GETTING ALL THE ROOMS FROM THE DATBASE
-			Util utilRoom = new Util(mongo, "Rooms");
-			List<Room> AllRooms = utilRoom.readAllRooms();
 			
 			//SHOWING THE LSIT ON THE WEBSITE
-			request.setAttribute("timeSlots", AllTimeSlots);
-			request.setAttribute("rooms", AllRooms);
-			request.setAttribute("sessions", AllSessions);
+			request.setAttribute("timeSlots", dbi.getTimeSlotList());
+			request.setAttribute("rooms", dbi.getRoomList());
+			request.setAttribute("sessions", dbi.getSessionList());
 	        
 
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
