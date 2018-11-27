@@ -132,6 +132,40 @@ private static MongoClient getConnection(String url , int port_num) {
 		}
 		return true;
 	}
+	private boolean updateSession(Document doc,String sessionName, String sessionID, String speakerName, String linkedRoomID, String linkedTimeID, String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			if(sessionName != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("sessionName", sessionName)));
+			}
+			if(speakerName != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("speakerName", speakerName)));
+			}
+			if(sessionID != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("sessionID", sessionID)));
+			}
+			if(linkedRoomID != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("roomId", linkedRoomID)));
+			}
+			if(linkedTimeID != null) {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("timeSlotId", linkedTimeID)));
+			}
+
+		}catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 	
 	public boolean deleteSession(String sessionId) {
 		return deleteDocument(new Document("_id", new ObjectId(sessionId)) , "Sessions");
@@ -148,6 +182,9 @@ private static MongoClient getConnection(String url , int port_num) {
 	
 	public boolean updateRoom(String roomId,String name, String capactity) {
 		return updateRoom(new Document("_id", new ObjectId(roomId)), name, capactity, "Rooms" );
+	}
+	public boolean updateSession(String sessionObjectID, String sessionName, String sessionID, String speakerName, String linkedRoomID, String linkedTimeID) {
+		return updateSession(new Document("_id", new ObjectId(sessionObjectID)), sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID,  "Sessions" );
 	}
 
 }

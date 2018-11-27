@@ -29,16 +29,22 @@ import com.mongodb.DBInterface.*;
 
 import com.mongodb.utilities.Util;
 
-@WebServlet("/addRoomSlot")
-public class AddRoom extends HttpServlet {
+@WebServlet("/modifyRoomSlot")
+public class ModifyRoom extends HttpServlet {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7681273591309361743L;
+
 	/* (non-Javadoc)
 	 * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
 	 */
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws
-			ServletException, IOException {
-			
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		 String button = request.getParameter("myButton");
+		 String roomSelect = request.getParameter("roomSelect");
+		 
 		 String roomName = request.getParameter("room-name");
 		 String capacity = request.getParameter("capacity");
 
@@ -57,11 +63,29 @@ public class AddRoom extends HttpServlet {
 			System.out.println(roomName);
 			System.out.println(capacity);
 			
-			
-			//ADDING ROOM TO DATABASE
 			Database_Init_Interface dbi = new Database_Init_Interface();
-			dbi.pushRoomDocument(roomName,"0", capacity);
 			
+			//BUTTON IF STATEMENT
+			if(button.equals("Submit")) {
+				
+				//ADDING ROOM TO DATABASE
+				dbi.pushRoomDocument(roomName,"0", capacity);
+			}
+			else if(button.equals("delete")) {
+				if(roomSelect != null) {
+					//DELETING ROOM FROM DATABASE
+					dbi.deleteRoom(roomSelect);	
+				}
+	
+			}else if(button.equals("modify")) {
+				if(roomSelect != null) {
+				//MODIFY ROOM FROM DATABASE			
+				dbi.updateRoom(roomSelect, roomName, capacity);
+				
+				}
+			}
+			
+
 			
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
 			Util util = new Util(mongo, "Sessions");
