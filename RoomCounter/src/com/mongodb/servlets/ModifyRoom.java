@@ -49,13 +49,6 @@ public class ModifyRoom extends HttpServlet {
 		 String capacity = request.getParameter("capacity");
 
 		 
-		if(roomName == null || capacity == null) {
-			//error
-			System.out.println("Error adding, values null");
-			RequestDispatcher rd = getServletContext().getRequestDispatcher(
-					"/Creation Menu.jsp");
-			rd.forward(request, response);
-		}else {
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			
@@ -67,9 +60,10 @@ public class ModifyRoom extends HttpServlet {
 			
 			//BUTTON IF STATEMENT
 			if(button.equals("Submit")) {
-				
-				//ADDING ROOM TO DATABASE
-				dbi.pushRoomDocument(roomName,"0", capacity);
+				if(roomName != "" || capacity != "") {
+					//ADDING ROOM TO DATABASE
+					dbi.pushRoomDocument(roomName,"0", capacity);
+				}
 			}
 			else if(button.equals("delete")) {
 				if(roomSelect != null) {
@@ -109,7 +103,7 @@ public class ModifyRoom extends HttpServlet {
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
 			
-		}
+		
 		
 	
 	}

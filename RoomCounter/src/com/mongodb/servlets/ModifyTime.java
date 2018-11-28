@@ -22,36 +22,51 @@ import com.mongodb.models.TimeSlot;
 import com.mongodb.utilities.Util;
 import com.mongodb.DBInterface.*;
 
-@WebServlet("/addTimeSlot")
-public class AddTime extends HttpServlet {
+@WebServlet("/modifyTimeSlot")
+public class ModifyTime extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws
 			ServletException, IOException {
+		
+
 			
 		 String startTime = request.getParameter("start");
 		 String endTime = request.getParameter("end");
+		 
+		 
+		 String button = request.getParameter("myButton");
+		 String timeSelect = request.getParameter("timeSelect");
 
 		 
-		if(startTime == null || endTime == null) {
-			//error
-			System.out.println("Error adding, values null");
-			RequestDispatcher rd = getServletContext().getRequestDispatcher(
-					"/Creation Menu.jsp");
-			rd.forward(request, response);
-		}else {
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			
 			//Test prints
-			System.out.println(startTime);
-			System.out.println(endTime);
-			
 			
 			//ADDING THE TIME SLOT TO THE DATABASE
 			
 			Database_Init_Interface dbi = new Database_Init_Interface();
-			dbi.pushTimeslotDocument("0", startTime, endTime);
+			
+			if(button.equals("Submit")) {
+				//ADDING SESSION TO DATABASE
+				if(startTime != "" && endTime != "")
+
+		        dbi.pushTimeslotDocument(startTime, endTime);
+				
+			}else if(button.equals("delete")) {
+				if(timeSelect != null) {
+					//DELETING SESSION FROM DATABASE
+					dbi.deleteTimeSlot(timeSelect);	
+				}
+	
+			}else if(button.equals("modify")) {
+				if(timeSelect != null) {
+				//MODIFY SESSION FROM DATABASE
+				
+				dbi.updateTime(timeSelect, startTime, endTime);
+				}
+			}
 			
 			
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
@@ -76,7 +91,7 @@ public class AddTime extends HttpServlet {
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
 			
-		}
+		
 		
 	
 	}

@@ -46,14 +46,6 @@ public class ModifySession extends HttpServlet {
 		 String button = request.getParameter("myButton");
 		 String sessionSelect = request.getParameter("sessionSelect");
 
-		 
-		if(sessionName == null || sessionID == null || speakerName == null) {
-			//error
-			System.out.println("Error adding, values null");
-			RequestDispatcher rd = getServletContext().getRequestDispatcher(
-					"/Creation Menu.jsp");
-			rd.forward(request, response);
-		}else {
 			
 			if(linkedRoomID == null) {
 				linkedRoomID = "";
@@ -74,9 +66,12 @@ public class ModifySession extends HttpServlet {
 			
 			if(button.equals("Submit")) {
 				//ADDING SESSION TO DATABASE
+				if(sessionName != "" && sessionID != "" && speakerName != "") {
 
-		        dbi.pushSessionDocument(sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
-				
+			        dbi.pushSessionDocument(sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
+					
+				}
+
 			}else if(button.equals("delete")) {
 				if(sessionSelect != null) {
 					//DELETING SESSION FROM DATABASE
@@ -84,9 +79,8 @@ public class ModifySession extends HttpServlet {
 				}
 	
 			}else if(button.equals("modify")) {
-				if(sessionSelect != null && (sessionName != null || speakerName != null)) {
+				if(sessionSelect != null) {
 				//MODIFY SESSION FROM DATABASE
-				
 				dbi.updateSession(sessionSelect, sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
 				}
 			}
@@ -122,7 +116,7 @@ public class ModifySession extends HttpServlet {
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
 			
-		}
+		
 		
 	
 	}

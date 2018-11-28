@@ -32,10 +32,9 @@
 <br>
 
          <!--  URLs for form methods -->
-         	<c:url value="/addSession" var="addSessionURL"></c:url>
-         	<c:url value="/addTimeSlot" var="addTimeSlotURL"></c:url>
-         	<c:url value="/addRoomSlot" var="addRoomSlotURL"></c:url>
          	
+         	
+         	<c:url value="/modifyTimeSlot" var="modifyTimeSlotsURL"></c:url>
          	<c:url value="/modifyRoomSlot" var="modifyRoomSlotsURL"></c:url>
          	<c:url value="/modifySession" var="modifySessionURL"></c:url>
          	
@@ -48,7 +47,7 @@
 		class="col-xs-12 col-sm-12 col-md-12 col-lg-8 offset-lg-2 column-2">
 		<!-- time slot form -->
 		<div class="container-fluid container-2">
-			<form class="forms" id="timeSlotForm" action='<c:out value="${addTimeSlotURL}"></c:out>'
+			<form class="forms" id="timeSlotForm" action='<c:out value="${modifyTimeSlotsURL}"></c:out>'
 				method="POST">
 				<h4 class="large-heading">
 					<span class="heading-text-1">Add Time Slot:</span>
@@ -57,19 +56,25 @@
 				<input name="start" type="time"> <span
 					class="text-element small-heading">End Time:<br></span> <input
 					name="end" type="time"> <br> <br>
-				<button type="submit" class="btn" value="Submit">Submit</button>
-			</form>
+				<button type="submit" name="myButton" class="btn" value="Submit">Submit</button>
+
 			<div class="current-db-container">
 				<div id="curTimeSlots" class="current-db" style="height: 225px;">
+				<select name="timeSelect" id="timeSelect" class="dynam-select" multiple>
 				<c:forEach items="${requestScope.timeSlots}" var="timeSlots">
                 <option value="${timeSlots.timeSlotID}">Start Time: ${timeSlots.startTime}, End Time: ${timeSlots.endTime}</option> <br>           
                 </c:forEach>
+                </select>
 				</div>
 				<br>
-				<button class="btn" onclick="modifyTimeSlot()">Modify</button>
-				<button class="btn" onclick="deleteTimeSlot()">Delete</button>
+				<button class="btn" name="myButton" type="submit" value="modify">Modify</button>
+				<button class="btn" name="myButton" type="submit" value="delete">Delete</button>
 			</div>
+			</form>
+
+			
 		</div>
+
 
 		<!-- room form -->
 		<div class="container-fluid container-3">

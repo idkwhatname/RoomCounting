@@ -80,7 +80,7 @@ private static MongoClient getConnection(String url , int port_num) {
 		return true;
 	}
 	
-	public boolean pushTimeslotDocument(String id , String startTime , String endTime) {
+	public boolean pushTimeslotDocument(String startTime , String endTime) {
 		
 		MongoCollection<Document> timeSlotColl = db.getCollection("TimeSlots");
 
@@ -92,7 +92,7 @@ private static MongoClient getConnection(String url , int port_num) {
 		}
 		*/
 
-        Document newTimeSlotDoc = new Document("timeSlotId" , id).append(
+        Document newTimeSlotDoc = new Document(
 				"startTime" , startTime
 			).append(
 				"endTime" , endTime
@@ -116,12 +116,12 @@ private static MongoClient getConnection(String url , int port_num) {
 	private boolean updateRoom(Document doc,String name,String capacity, String collectionName) {
 		MongoCollection<Document> collection = db.getCollection(collectionName);
 		try {
-			if(name != null) {
+			if(name != null && name != "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("roomName", name)));
 			}
-			if(capacity != null) {
+			if(capacity != null && capacity != "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("capacity", capacity)));
@@ -132,30 +132,49 @@ private static MongoClient getConnection(String url , int port_num) {
 		}
 		return true;
 	}
+	private boolean updateTime(Document doc,String startTime,String endTime, String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			if(startTime != null && startTime != "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("startTime", startTime)));
+			}
+			if(endTime != null && endTime != "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("endTime", endTime)));
+			}
+
+		}catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 	private boolean updateSession(Document doc,String sessionName, String sessionID, String speakerName, String linkedRoomID, String linkedTimeID, String collectionName) {
 		MongoCollection<Document> collection = db.getCollection(collectionName);
 		try {
-			if(sessionName != null) {
+			if(sessionName != null && sessionName != "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("sessionName", sessionName)));
 			}
-			if(speakerName != null) {
+			if(speakerName != null && speakerName != "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("speakerName", speakerName)));
 			}
-			if(sessionID != null) {
+			if(sessionID != null && sessionID != "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("sessionID", sessionID)));
 			}
-			if(linkedRoomID != null) {
+			if(linkedRoomID != null && linkedRoomID != "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("roomId", linkedRoomID)));
 			}
-			if(linkedTimeID != null) {
+			if(linkedTimeID != null && linkedTimeID !=  "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("timeSlotId", linkedTimeID)));
@@ -185,6 +204,9 @@ private static MongoClient getConnection(String url , int port_num) {
 	}
 	public boolean updateSession(String sessionObjectID, String sessionName, String sessionID, String speakerName, String linkedRoomID, String linkedTimeID) {
 		return updateSession(new Document("_id", new ObjectId(sessionObjectID)), sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID,  "Sessions" );
+	}
+	public boolean updateTime(String timeId,String startTime, String endTime) {
+		return updateTime(new Document("_id", new ObjectId(timeId)), startTime, endTime, "TimeSlots" );
 	}
 
 }
