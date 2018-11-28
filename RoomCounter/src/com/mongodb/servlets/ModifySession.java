@@ -83,12 +83,7 @@ public class ModifySession extends HttpServlet {
 				//MODIFY SESSION FROM DATABASE
 				dbi.updateSession(sessionSelect, sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
 				}
-			}
-			
-			
-
-	        
-	        
+			}	        
 			
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
 			Util util = new Util(mongo, "Sessions");
@@ -104,21 +99,14 @@ public class ModifySession extends HttpServlet {
 			List<Room> AllRooms = utilRoom.readAllRooms();
 
 			
-			//SHOWING THE LSIT ON THE WEBSITE
+			//SHOWING THE LIST ON THE WEBSITE
 			request.setAttribute("timeSlots", AllTimeSlots);
 			request.setAttribute("rooms", AllRooms);
 			request.setAttribute("sessions", AllSessions);
-	        
-	        
-
-			
-			
+	        	        
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
-			
-		
-		
-	
+
 	}
 
 }
