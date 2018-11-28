@@ -1,7 +1,6 @@
 package com.mongodb.servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -23,57 +22,62 @@ import com.mongodb.models.TimeSlot;
 import com.mongodb.utilities.Util;
 import com.mongodb.DBInterface.*;
 
-@WebServlet("/addSession")
-public class AddSession extends HttpServlet {
+@WebServlet("/modifyTimeSlot")
+public class ModifyTime extends HttpServlet {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws
 			ServletException, IOException {
+		
+
 			
-		 String sessionName = request.getParameter("session-name");
-		 String sessionID = request.getParameter("session-number");
-		 String speakerName = request.getParameter("speaker");
+		 String startTime = request.getParameter("start");
+		 String endTime = request.getParameter("end");
+		 
+		 
+		 String button = request.getParameter("myButton");
+		 String timeSelect = request.getParameter("timeSelect");
 
 		 
-		if(sessionName == null || sessionID == null || speakerName == null) {
-			//error
-			System.out.println("Error adding, values null");
-			RequestDispatcher rd = getServletContext().getRequestDispatcher(
-					"/Creation Menu.jsp");
-			rd.forward(request, response);
-		}else {
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			
 			//Test prints
-			System.out.println(sessionName);
-			System.out.println(sessionID);
-			System.out.println(speakerName);
 			
+			//ADDING THE TIME SLOT TO THE DATABASE
 			
+			Database_Init_Interface dbi = new Database_Init_Interface();
 			
-			//ADDING SESSION TO DATABASE
-	        Database_Init_Interface dbi = new Database_Init_Interface();
-	        dbi.pushSessionDocument(sessionName, sessionID, speakerName, "", "");
-	        
-	      //SHOWING THE LSIT ON THE WEBSITE
+			if(button.equals("Submit")) {
+				//ADDING SESSION TO DATABASE
+				if(startTime != "" && endTime != "")
+
+		        dbi.pushTimeslotDocument(startTime, endTime);
+				
+			}else if(button.equals("delete")) {
+				if(timeSelect != null) {
+					//DELETING SESSION FROM DATABASE
+					dbi.deleteTimeSlot(timeSelect);	
+				}
+	
+			}else if(button.equals("modify")) {
+				if(timeSelect != null) {
+				//MODIFY SESSION FROM DATABASE
+				
+				dbi.updateTime(timeSelect, startTime, endTime);
+				}
+			}
+			
+			//SHOWING THE LSIT ON THE WEBSITE
 			request.setAttribute("timeSlots", dbi.getTimeSlotList());
 			request.setAttribute("rooms", dbi.getRoomList());
 			request.setAttribute("sessions", dbi.getSessionList());
 	        
-	        
 
-			
-			
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
 			
-		}
+		
 		
 	
 	}

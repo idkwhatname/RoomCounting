@@ -48,11 +48,26 @@ public class Database_Init_Interface extends DatabaseUpdateSessionInterface{
 
 		return pushDocument("Session" , newSessionDoc);
 	}
+<<<<<<< HEAD
+	
+	public boolean pushTimeslotDocument(String startTime , String endTime) {
+		
+		MongoCollection<Document> timeSlotColl = db.getCollection("TimeSlots");
+=======
+>>>>>>> master
 
 	public boolean pushRoomDocument(String roomName, String capacity) {
 
+<<<<<<< HEAD
+        Document newTimeSlotDoc = new Document(
+				"startTime" , startTime
+			).append(
+				"endTime" , endTime
+			);
+=======
 		int id = nextRoomId;
 		nextRoomId++;
+>>>>>>> master
 
 		// check and convert ints
 
@@ -93,15 +108,68 @@ public class Database_Init_Interface extends DatabaseUpdateSessionInterface{
 	private boolean updateRoom(Document doc,String name,String capacity, String collectionName) {
 		MongoCollection<Document> collection = db.getCollection(collectionName);
 		try {
-			if(name != null) {
+			if(name != null && name != "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("roomName", name)));
 			}
-			if(capacity != null) {
+			if(capacity != null && capacity != "") {
 				collection.updateOne(
 					    new BasicDBObject(doc),
 					    new BasicDBObject("$set", new BasicDBObject("capacity", capacity)));
+			}
+
+		}catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	private boolean updateTime(Document doc,String startTime,String endTime, String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			if(startTime != null && startTime != "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("startTime", startTime)));
+			}
+			if(endTime != null && endTime != "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("endTime", endTime)));
+			}
+
+		}catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
+	private boolean updateSession(Document doc,String sessionName, String sessionID, String speakerName, String linkedRoomID, String linkedTimeID, String collectionName) {
+		MongoCollection<Document> collection = db.getCollection(collectionName);
+		try {
+			if(sessionName != null && sessionName != "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("sessionName", sessionName)));
+			}
+			if(speakerName != null && speakerName != "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("speakerName", speakerName)));
+			}
+			if(sessionID != null && sessionID != "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("sessionID", sessionID)));
+			}
+			if(linkedRoomID != null && linkedRoomID != "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("roomId", linkedRoomID)));
+			}
+			if(linkedTimeID != null && linkedTimeID !=  "") {
+				collection.updateOne(
+					    new BasicDBObject(doc),
+					    new BasicDBObject("$set", new BasicDBObject("timeSlotId", linkedTimeID)));
 			}
 
 		}catch (Exception e) {
@@ -156,10 +224,12 @@ public class Database_Init_Interface extends DatabaseUpdateSessionInterface{
 	public boolean updateRoom(String roomId,String name, String capactity) {
 		return updateRoom(new Document("_id", new ObjectId(roomId)), name, capactity, "Rooms" );
 	}
-	
-	public boolean updateSession(String sessionId , String name,String begCount, String midCount , String endCount) {
-		return updateSession(new Document("_id", new ObjectId(sessionId)), name, begCount, midCount , endCount );
+
+	public boolean updateSession(String sessionObjectID, String sessionName, String sessionID, String speakerName, String linkedRoomID, String linkedTimeID) {
+		return updateSession(new Document("_id", new ObjectId(sessionObjectID)), sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID,  "Sessions" );
 	}
-	
+	public boolean updateTime(String timeId,String startTime, String endTime) {
+		return updateTime(new Document("_id", new ObjectId(timeId)), startTime, endTime, "TimeSlots" );
+	}
 
 }
