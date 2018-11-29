@@ -1,0 +1,136 @@
+package com.mongodb.servlets;
+
+import java.io.IOException;
+import java.util.List;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.mongodb.DBInterface.Database_Init_Interface;
+import com.mongodb.DBInterface.Database_Report_Interface;
+import com.mongodb.client.MongoClient;
+import com.mongodb.models.Room;
+import com.mongodb.models.Session;
+import com.mongodb.models.TimeSlot;
+import com.mongodb.utilities.Util;
+
+@WebServlet("/search")
+public class SearchServlet extends HttpServlet {
+
+	private static final long serialVersionUID = -1980116968782840913L;
+	private List<Session> listSessions;
+	private List<Room> listRoom;
+	private List<TimeSlot> listTimeSlots;
+	private Database_Init_Interface dbi = new Database_Init_Interface();
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		MongoClient mongo = (MongoClient) request.getServletContext().getAttribute("MONGO_CLIENT");
+
+		Util rooms = new Util(mongo, "Rooms");
+		listRoom = rooms.readAllRooms();
+
+		Util sessions = new Util(mongo, "Sessions");
+		listSessions = sessions.readAllSessions();
+
+		Util timeslots = new Util(mongo, "TimeSlots");
+		listTimeSlots = timeslots.readAllTimeSlots();
+
+		request.setAttribute("rooms", listRoom);
+		request.setAttribute("sessions", listSessions);
+		request.setAttribute("timeslots", listTimeSlots);
+
+		// System.out.println(listSessions.get(0).getSessionID());
+		RequestDispatcher dispatcher = request.getRequestDispatcher("report.jsp");
+		dispatcher.forward(request, response);
+	}
+
+	private String getSessionBasedOnRoom(String _roomID) {
+		String roomID = "";
+		for (int i = 0; i < listSessions.size(); i++) {
+			if (listSessions.get(i).getRoom().equals(_roomID))
+				roomID = listSessions.get(i).getSessionID();
+		}
+
+		return roomID;
+	}
+	
+	private String getSessionBasedOnRoomAndTime(String _roomID, String _timeSlotID) {
+		String roomID = "";
+		for (int i = 0; i < listSessions.size(); i++) {
+			if (listSessions.get(i).getRoom().equals(_roomID))
+				roomID = listSessions.get(i).getSessionID();
+		}
+
+		return roomID;
+	}
+
+	private String getSessionBasedOnTime(String _timeSlotID) {
+		String timeSlotID = "";
+		for (int i = 0; i < listSessions.size(); i++) {
+			if (listSessions.get(i).getTimeSlot().equals(_timeSlotID))
+				timeSlotID = listSessions.get(i).getSessionID();
+		}
+
+		return timeSlotID;
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		Database_Report_Interface dri = new Database_Report_Interface();
+
+		String count = request.getParameter("count");
+		String radio = request.getParameter("countPeriod");
+		String sessionName = request.getParameter("sessionName");
+		String roomName = request.getParameter("roomName");
+		String timeSlotName = request.getParameter("timeSlotName");
+
+		System.out.println(sessionName);
+		System.out.println(getSessionBasedOnRoom(roomName));
+		System.out.println(getSessionBasedOnRoom(timeSlotName));
+
+		if (sessionName != null) {
+			if (!sessionName.equals("none")) {
+				if (radio.equals("beginning"))
+					dbi.updateSession(sessionName, null, null, null, null, null, count, null, null);
+				else if (radio.equals("middle"))
+					dbi.updateSession(sessionName, null, null, null, null, null, null, count, null);
+				else
+					dbi.updateSession(sessionName, null, null, null, null, null, null, null, count);
+			}
+		}
+
+		if (roomName != null) {
+			if (!roomName.equals("none")) {
+				if (radio.equals("beginning"))
+					dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, count, null, null);
+				else if (radio.equals("middle"))
+					dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, null, count, null);
+				else
+					dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, null, null, count);
+			}
+		}
+
+		if (timeSlotName != null) {
+			if (!timeSlotName.equals("none")) {
+				if (radio.equals("beginning"))
+					dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, count, null,
+							null);
+				else if (radio.equals("middle"))
+					dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, null, count,
+							null);
+				else
+					dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, null, null,
+							count);
+			}
+		}
+
+		System.out.println(count);
+	}
+}
