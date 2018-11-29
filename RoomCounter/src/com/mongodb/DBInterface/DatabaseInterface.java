@@ -110,7 +110,7 @@ public class DatabaseInterface {
         return results;
 	}
 	
-	public Session getSessionFromRoomAndTime(String roomQuery , String timeQuery){
+	public Session getSessionsFromRoomAndTime(String roomQuery , String timeQuery){
         List<Session> sessionList = getSessionList();
         List<Session> results = new List<Session>();
         for(int i = 0; i < sessionList.size(); i++){

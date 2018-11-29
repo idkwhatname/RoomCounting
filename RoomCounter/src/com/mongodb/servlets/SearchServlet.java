@@ -90,7 +90,7 @@ public class SearchServlet extends HttpServlet {
 		}	
 
 		else if (timeSlotName != null && roomName != null){
-			dbi.updateSessionCounts(dbi.getSessionFromRoomAndTime(roomName , timeSlotName).get(0).getSessionName() , radio , count);
+			dbi.updateSessionCounts(dbi.getSessionsFromRoomAndTime(roomName , timeSlotName).get(0).getSessionName() , radio , count);
 		}
 		// if (sessionName != null) {
 		// 	if (!sessionName.equals("none")) {
