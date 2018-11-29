@@ -92,41 +92,6 @@ public class SearchServlet extends HttpServlet {
 		else if (timeSlotName != null && roomName != null){
 			dbi.updateSessionCounts(dbi.getSessionsFromRoomAndTime(roomName , timeSlotName).get(0).getSessionName() , radio , count);
 		}
-		// if (sessionName != null) {
-		// 	if (!sessionName.equals("none")) {
-		// 		if (radio.equals("beginning"))
-		// 			dbi.updateSession(sessionName, null, null, null, null, null, count, null, null);
-		// 		else if (radio.equals("middle"))
-		// 			dbi.updateSession(sessionName, null, null, null, null, null, null, count, null);
-		// 		else
-		// 			dbi.updateSession(sessionName, null, null, null, null, null, null, null, count);
-		// 	}
-		// }
-
-		// if (roomName != null) {
-		// 	if (!roomName.equals("none")) {
-		// 		if (radio.equals("beginning"))
-		// 			dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, count, null, null);
-		// 		else if (radio.equals("middle"))
-		// 			dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, null, count, null);
-		// 		else
-		// 			dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, null, null, count);
-		// 	}
-		// }
-
-		// if (timeSlotName != null) {
-		// 	if (!timeSlotName.equals("none")) {
-		// 		if (radio.equals("beginning"))
-		// 			dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, count, null,
-		// 					null);
-		// 		else if (radio.equals("middle"))
-		// 			dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, null, count,
-		// 					null);
-		// 		else
-		// 			dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, null, null,
-		// 					count);
-		// 	}
-		// }
 
 		System.out.println(count);
 	}
