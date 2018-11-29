@@ -19,8 +19,8 @@ import com.mongodb.models.Session;
 import com.mongodb.models.TimeSlot;
 import com.mongodb.utilities.Util;
 
-@WebServlet("/main")
-public class MainServlet extends HttpServlet {
+@WebServlet("/query")
+public class QueryServlet extends HttpServlet {
 	
 	/**
 	 * 
@@ -41,7 +41,7 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("rooms", dbi.getRoomList());
 		request.setAttribute("sessions", dbi.getSessionList());
 		
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/CreationMenu.jsp");
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("/Query.jsp");
 		rd.forward(request, response);
 		
 	       

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title>Query</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -29,7 +29,7 @@
       <br>
       <span class="text-element small-heading">Room Name:</span>
       <select class="room">
-        <c:forEach items="${requestScope.rooms}" var="room">
+        <c:forEach items="${requestScope.rooms}" var="rooms">
            <option value="${room.roomID}">Room Name: ${room.name}, Capacity: ${room.capacity}</option><br>        
            </c:forEach>
       </select>
@@ -42,15 +42,8 @@
            <option value="${timeSlots.timeSlotID}">Start Time: ${timeSlots.startTime}, End Time: ${timeSlots.endTime}</option> <br>
            </c:forEach>
       </select>
+	  <br>
       <br>
-      <br>
-      <span class="text-element small-heading">Speaker:</span>
-      <select
-					class="room">
-      <c:forEach items="${requestScope.timeSlots}" var="timeSlots">
-           <option value="${timeSlots.timeSlotID}">Start Time: ${timeSlots.startTime}, End Time: ${timeSlots.endTime}</option> <br>
-           </c:forEach>
-      </select>
       <button type="button" class="btn">Submit</button>
     </form>
   </div>
