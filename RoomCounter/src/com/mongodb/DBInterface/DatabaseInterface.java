@@ -88,5 +88,37 @@ public class DatabaseInterface {
 		return sessions;
 	}
 
+	public List<Session> getSessionsFromName(String query){
+        List<Session> sessionList = getSessionList();
+        List<Session> results = new List<Session>();
+        for(int i = 0; i < sessionList.size(); i++){
+            if(sessionList.get(i).getSessionName().strip().equalsIgnoreCase(query)){
+                results.add(sessionList.get(i));
+            }
+        }
+        return results;
+    }
+
+    public List<Session> getSessionsFromNumber(String query){
+        List<Session> sessionList = getSessionList();
+        List<Session> results = new List<Session>();
+        for(int i = 0; i < sessionList.size(); i++){
+            if(sessionList.get(i).getSessionNumber().strip().equalsIgnoreCase(query)){
+                results.add(sessionList.get(i));
+            }
+        }
+        return results;
+	}
 	
+	public List<Session> getSessionsFromRoomAndTime(String roomQuery , String timeQuery){
+        List<Session> sessionList = getSessionList();
+        List<Session> results = new List<Session>();
+        for(int i = 0; i < sessionList.size(); i++){
+            if(sessionList.get(i).getTimeSlot().strip().equalsIgnoreCase(timeQuery)
+            && sessionList.get(i).getRoom().strip().equalsIgnoreCase(roomQuery)){
+                results.add(sessionList.get(i));
+            }
+        }
+        return results;
+    }
 }

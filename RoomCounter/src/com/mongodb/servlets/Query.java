@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mongodb.DBInterface.*;
+
 /**
  * Servlet implementation class Query
  */
@@ -31,6 +33,7 @@ public class Query extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
+		DatabaseInterface dbi = new DatabaseInterface();
 		
 		String button = request.getParameter("myButton");
 		
@@ -38,12 +41,21 @@ public class Query extends HttpServlet {
 		String sessionSelect = request.getParameter("sessionSelect");
 		String roomSelect = request.getParameter("roomSelect");
 		
-		
+		List<Session> queryResults = new List<Session>();
 		
 		if(button.equals("Submit")) {
-			if(timeSelect != "" || sessionSelect != "" || roomSelect != "") {
-				//CALL QUERY BASED ON GIVEN SELECTIONS
+			if(sessionSelect != "") {
+				/*
+				* Not sure which to use here, wrote a few methods but don't know what gets stored in "select" vars
+				*/
+				//queryResults = dbi.getSessionsFromName(sessionSelect);
+				queryResults = dbi.getSessionsFromNumber(sessionSelect);
 			}
+			else if (roomSelect != "" || timeSelect != ""){
+				queryResults = dbi.getSessionsFromRoomAndTime(roomSelect , timeSelect);
+			}
+
+
 		}
 				
 		
