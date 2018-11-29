@@ -12,21 +12,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
+import com.mongodb.DBInterface.Database_Init_Interface;
 import com.mongodb.client.MongoClient;
 import com.mongodb.models.Room;
 import com.mongodb.models.Session;
 import com.mongodb.models.TimeSlot;
 import com.mongodb.utilities.Util;
 
+@WebServlet("/main")
 public class MainServlet extends HttpServlet {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -838118330214813277L;
+
 	@Override
 	  protected void doGet(HttpServletRequest request, HttpServletResponse response)
 
 	        throws ServletException, IOException {
 		MongoClient mongo = (MongoClient) request.getServletContext()
 				.getAttribute("MONGO_CLIENT");
-		
+		Database_Init_Interface dbi = new Database_Init_Interface();
 		
 		//GETTING ALL THE SESSIONS FROM THE DATBASE
 		Util util = new Util(mongo, "Sessions");
@@ -45,11 +52,8 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("timeSlots", AllTimeSlots);
 		request.setAttribute("rooms", AllRooms);
 		request.setAttribute("sessions", AllSessions);
-        
-	
 		
-		
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("/CreationMenu.jsp");
 		rd.forward(request, response);
 		
 	       

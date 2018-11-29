@@ -73,7 +73,8 @@ public class ModifyRoom extends HttpServlet {
 					dbi.deleteRoom(roomSelect);	
 				}
 	
-			}else if(button.equals("modify")) {
+			}
+			else if(button.equals("modify")) {
 				if(roomSelect != null) {
 				//MODIFY ROOM FROM DATABASE			
 				dbi.updateRoom(roomSelect, roomName, capacity);
