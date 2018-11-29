@@ -20,8 +20,8 @@ import java.util.List;
 
 public class DatabaseInterface {
 
-	private String DB_NAME = "Database";
-	private MongoDatabase db;
+	protected String DB_NAME = "Database";
+	protected MongoDatabase db;
 
 	public DatabaseInterface(String url , int port){
 		db = getConnection(url , port).getDatabase(DB_NAME);
@@ -31,12 +31,7 @@ public class DatabaseInterface {
 		this("localhost" , 27017);
 	}
 
-	public MongoDatabase getDB(){
-		return db;
-	}
-
-	private static MongoClient getConnection(String url , int port_num) {
-        
+	protected static MongoClient getConnection(String url , int port_num) {        
         MongoClient mongoClntObj = new MongoClient(url, port_num);
         return mongoClntObj;
 	}
