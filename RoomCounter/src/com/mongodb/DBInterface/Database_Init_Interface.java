@@ -65,7 +65,7 @@ public class Database_Init_Interface extends DatabaseInterface {
 		return true;
 	}
 
-	public boolean pushTimeslotDocument(String id, String startTime, String endTime) {
+	public boolean pushTimeslotDocument( String startTime, String endTime) {
 
 		MongoCollection<Document> timeSlotColl = db.getCollection("TimeSlots");
 
@@ -76,7 +76,7 @@ public class Database_Init_Interface extends DatabaseInterface {
 		 * }
 		 */
 
-		Document newTimeSlotDoc = new Document("timeSlotId", id).append("startTime", startTime).append("endTime",
+		Document newTimeSlotDoc = new Document("startTime", startTime).append("endTime",
 				endTime);
 
 		timeSlotColl.insertOne(newTimeSlotDoc);

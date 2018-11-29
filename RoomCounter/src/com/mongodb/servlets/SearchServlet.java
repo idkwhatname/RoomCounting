@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.mongodb.DBInterface.DatabaseInterface;
 import com.mongodb.DBInterface.Database_Init_Interface;
 import com.mongodb.DBInterface.Database_Report_Interface;
 import com.mongodb.client.MongoClient;
@@ -26,7 +27,7 @@ public class SearchServlet extends HttpServlet {
 	private List<Session> listSessions;
 	private List<Room> listRoom;
 	private List<TimeSlot> listTimeSlots;
-	private Database_Report_Interface dbi = new Database_Report_Interface();
+	private DatabaseInterface dbi = new Database_Report_Interface();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -35,6 +36,8 @@ public class SearchServlet extends HttpServlet {
 		request.setAttribute("rooms", dbi.getRoomList());
 		request.setAttribute("sessions", dbi.getSessionList());
 		request.setAttribute("timeslots", dbi.getTimeSlotList());
+		
+		System.out.println(dbi.getRoomList().size());
 
 		// System.out.println(listSessions.get(0).getSessionID());
 		RequestDispatcher dispatcher = request.getRequestDispatcher("report.jsp");

@@ -51,7 +51,7 @@ public class AddTime extends HttpServlet {
 			//ADDING THE TIME SLOT TO THE DATABASE
 			
 			Database_Init_Interface dbi = new Database_Init_Interface();
-			dbi.pushTimeslotDocument("0", startTime, endTime);
+			dbi.pushTimeslotDocument(startTime, endTime);
 			
 			
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
