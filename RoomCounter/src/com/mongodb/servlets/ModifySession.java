@@ -23,8 +23,8 @@ import com.mongodb.models.TimeSlot;
 import com.mongodb.utilities.Util;
 import com.mongodb.DBInterface.*;
 
-@WebServlet("/addSession")
-public class AddSession extends HttpServlet {
+@WebServlet("/modifySession")
+public class ModifySession extends HttpServlet {
 	
 	/**
 	 * 
@@ -34,19 +34,26 @@ public class AddSession extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws
 			ServletException, IOException {
+		
+		
 			
 		 String sessionName = request.getParameter("session-name");
 		 String sessionID = request.getParameter("session-number");
 		 String speakerName = request.getParameter("speaker");
-
+		 String linkedRoomID = request.getParameter("roomSelect");
+		 String linkedTimeID = request.getParameter("timeSlotSelect");
 		 
-		if(sessionName == null || sessionID == null || speakerName == null) {
-			//error
-			System.out.println("Error adding, values null");
-			RequestDispatcher rd = getServletContext().getRequestDispatcher(
-					"/Creation Menu.jsp");
-			rd.forward(request, response);
-		}else {
+		 String button = request.getParameter("myButton");
+		 String sessionSelect = request.getParameter("sessionSelect");
+
+			
+			if(linkedRoomID == null) {
+				linkedRoomID = "";
+			}
+			if(linkedTimeID == null) {
+				linkedTimeID = "";
+			}
+			
 			MongoClient mongo = (MongoClient) request.getServletContext()
 					.getAttribute("MONGO_CLIENT");
 			
@@ -55,13 +62,28 @@ public class AddSession extends HttpServlet {
 			System.out.println(sessionID);
 			System.out.println(speakerName);
 			
-			
-			
-			//ADDING SESSION TO DATABASE
 	        Database_Init_Interface dbi = new Database_Init_Interface();
-	        dbi.pushSessionDocument(sessionName, sessionID, speakerName, "", "");
-	        
-	        
+			
+			if(button.equals("Submit")) {
+				//ADDING SESSION TO DATABASE
+				if(sessionName != "" && sessionID != "" && speakerName != "") {
+
+			        dbi.pushSessionDocument(sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
+					
+				}
+
+			}else if(button.equals("delete")) {
+				if(sessionSelect != null) {
+					//DELETING SESSION FROM DATABASE
+					dbi.deleteSession(sessionSelect);	
+				}
+	
+			}else if(button.equals("modify")) {
+				if(sessionSelect != null) {
+				//MODIFY SESSION FROM DATABASE
+				dbi.updateSession(sessionSelect, sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
+				}
+			}	        
 			
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
 			Util util = new Util(mongo, "Sessions");
@@ -75,22 +97,16 @@ public class AddSession extends HttpServlet {
 			//GETTING ALL THE ROOMS FROM THE DATBASE
 			Util utilRoom = new Util(mongo, "Rooms");
 			List<Room> AllRooms = utilRoom.readAllRooms();
+
 			
-			//SHOWING THE LSIT ON THE WEBSITE
+			//SHOWING THE LIST ON THE WEBSITE
 			request.setAttribute("timeSlots", AllTimeSlots);
 			request.setAttribute("rooms", AllRooms);
 			request.setAttribute("sessions", AllSessions);
-	        
-	        
-
-			
-			
+	        	        
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
-			
-		}
-		
-	
+
 	}
 
 }
