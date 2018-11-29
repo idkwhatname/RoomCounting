@@ -19,8 +19,6 @@
 <body>
 
          <!--  URLs for form methods -->
-         	
-         	
          	<c:url value="/modifyTimeSlot" var="modifyTimeSlotsURL"></c:url>
          	<c:url value="/modifyRoomSlot" var="modifyRoomSlotsURL"></c:url>
          	<c:url value="/modifySession" var="modifySessionURL"></c:url>
@@ -126,7 +124,7 @@
 				<br>
 				<span class="text-element small-heading">Room:</span> 
 				<select class="room" name="roomSelect" id="roomSelect">
-					
+				
 					<c:forEach items="${requestScope.rooms}" var="room">
                 	<option value="${room.roomID}">Room Name: ${room.name}, Capacity: ${room.capacity}</option><br>          
                		</c:forEach>
@@ -140,9 +138,11 @@
                	<option value="${session.sessionID}">Session Name: ${session.sessionName}, Speaker: ${session.speaker}</option> <br>           
                 </c:forEach>
                 </select>
+                
 				<button class="btn" name="myButton" type="submit" value="modify">Modify</button>
 				<button class="btn" name="myButton" type="submit" value="delete">Delete</button>
 			</div>
+			</form>
 		</div>
   </div>
 </div>

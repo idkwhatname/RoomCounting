@@ -80,8 +80,13 @@ public class ModifyRoom extends HttpServlet {
 				
 				}
 			}
+			//GETTING ALL THE SESSIONS FROM THE DATBASE
+			Util util = new Util(mongo, "Sessions");
+			List<Session> AllSessions = util.readAllSessions();
 			
-
+			//GETTING ALL THE TIME SLOTS FROM THE DATABASE
+			Util utilTime = new Util(mongo, "TimeSlots");
+			List<TimeSlot> AllTimeSlots = utilTime.readAllTimeSlots();
 			
 			//SHOWING THE LSIT ON THE WEBSITE
 			request.setAttribute("timeSlots", dbi.getTimeSlotList());
@@ -91,10 +96,6 @@ public class ModifyRoom extends HttpServlet {
 			
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
-			
-		
-		
-	
 	}
 
 }

@@ -23,8 +23,11 @@ public class ModelConverter {
 		s.setSessionName((String)doc.get("sessionName"));
 		s.setSessionNumber((String)doc.get("sessionID"));
 		s.setSpeaker((String)doc.get("speakerName"));
-		s.setTimeSlot((String)doc.get("speakerName"));
+		s.setTimeSlot((String)doc.get("timeSlotId"));
 		s.setRoom((String)doc.get("roomId"));
+		s.setStartCount((String)doc.get("startCount"));
+		s.setMiddleCount((String)doc.get("middleCount"));
+		s.setEndCount((String)doc.get("endCount"));
 		return s;
 	}
 	

@@ -42,10 +42,18 @@ public class ModifySession extends HttpServlet {
 		 String speakerName = request.getParameter("speaker");
 		 String linkedRoomID = request.getParameter("roomSelect");
 		 String linkedTimeID = request.getParameter("timeSlotSelect");
-		 
+	 
 		 String button = request.getParameter("myButton");
 		 String sessionSelect = request.getParameter("sessionSelect");
 
+		 
+		if(sessionName == null || sessionID == null || speakerName == null) {
+			//error
+			System.out.println("Error adding, values null");
+			RequestDispatcher rd = getServletContext().getRequestDispatcher(
+					"/Creation Menu.jsp");
+			rd.forward(request, response);
+		}else {
 			
 			if(linkedRoomID == null) {
 				linkedRoomID = "";
@@ -71,7 +79,8 @@ public class ModifySession extends HttpServlet {
 			        dbi.pushSessionDocument(sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
 					
 				}
-
+		        dbi.pushSessionDocument(sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
+				
 			}else if(button.equals("delete")) {
 				if(sessionSelect != null) {
 					//DELETING SESSION FROM DATABASE
@@ -84,7 +93,7 @@ public class ModifySession extends HttpServlet {
 				dbi.updateSession(sessionSelect, sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
 				}
 			}	        
-			
+		
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
 			Util util = new Util(mongo, "Sessions");
 			List<Session> AllSessions = util.readAllSessions();

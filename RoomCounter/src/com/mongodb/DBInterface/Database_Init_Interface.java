@@ -88,6 +88,7 @@ public class Database_Init_Interface extends DatabaseUpdateSessionInterface{
 	}
 	
 	private boolean deleteDocument(Document doc , String collectionName) {
+
 		MongoCollection<Document> collection = db.getCollection(collectionName);
 		try {
 			collection.deleteOne(doc);
