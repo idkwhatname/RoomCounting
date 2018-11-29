@@ -26,10 +26,10 @@ public class Database_Report_Interface extends DatabaseInterface {
 		return mongoClntObj;
 	}
 
-	public boolean updateSessionCounts(String sessionID, String countType, String count, String collectionName) {
+	public boolean updateSessionCounts(String sessionID, String countType, String count) {
 
 		Document doc = new Document("_id",new ObjectId(sessionID));
-		MongoCollection<Document> collection = db.getCollection(collectionName);
+		MongoCollection<Document> collection = db.getCollection("Sessions");
 		try {
 
 			if (count != null) {

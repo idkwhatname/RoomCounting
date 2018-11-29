@@ -26,24 +26,15 @@ public class SearchServlet extends HttpServlet {
 	private List<Session> listSessions;
 	private List<Room> listRoom;
 	private List<TimeSlot> listTimeSlots;
-	private Database_Init_Interface dbi = new Database_Init_Interface();
+	private Database_Report_Interface dbi = new Database_Report_Interface();
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		MongoClient mongo = (MongoClient) request.getServletContext().getAttribute("MONGO_CLIENT");
 
-		Util rooms = new Util(mongo, "Rooms");
-		listRoom = rooms.readAllRooms();
-
-		Util sessions = new Util(mongo, "Sessions");
-		listSessions = sessions.readAllSessions();
-
-		Util timeslots = new Util(mongo, "TimeSlots");
-		listTimeSlots = timeslots.readAllTimeSlots();
-
-		request.setAttribute("rooms", listRoom);
-		request.setAttribute("sessions", listSessions);
-		request.setAttribute("timeslots", listTimeSlots);
+		request.setAttribute("rooms", dbi.getRoomList());
+		request.setAttribute("sessions", dbi.getSessionList());
+		request.setAttribute("timeslots", dbi.getTimeSlotList());
 
 		// System.out.println(listSessions.get(0).getSessionID());
 		RequestDispatcher dispatcher = request.getRequestDispatcher("report.jsp");
@@ -83,7 +74,6 @@ public class SearchServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Database_Report_Interface dri = new Database_Report_Interface();
 
 		String count = request.getParameter("count");
 		String radio = request.getParameter("countPeriod");
@@ -96,40 +86,47 @@ public class SearchServlet extends HttpServlet {
 		System.out.println(getSessionBasedOnRoom(timeSlotName));
 
 		if (sessionName != null) {
-			if (!sessionName.equals("none")) {
-				if (radio.equals("beginning"))
-					dbi.updateSession(sessionName, null, null, null, null, null, count, null, null);
-				else if (radio.equals("middle"))
-					dbi.updateSession(sessionName, null, null, null, null, null, null, count, null);
-				else
-					dbi.updateSession(sessionName, null, null, null, null, null, null, null, count);
-			}
-		}
+			dbi.updateSessionCounts(sessionName , radio , count);
+		}	
 
-		if (roomName != null) {
-			if (!roomName.equals("none")) {
-				if (radio.equals("beginning"))
-					dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, count, null, null);
-				else if (radio.equals("middle"))
-					dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, null, count, null);
-				else
-					dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, null, null, count);
-			}
+		else if (timeSlotName != null && roomName != null){
+			dbi.updateSessionCounts(dbi.getSessionFromRoomAndTime(roomName , timeSlotName).get(0).getSessionName() , radio , count);
 		}
+		// if (sessionName != null) {
+		// 	if (!sessionName.equals("none")) {
+		// 		if (radio.equals("beginning"))
+		// 			dbi.updateSession(sessionName, null, null, null, null, null, count, null, null);
+		// 		else if (radio.equals("middle"))
+		// 			dbi.updateSession(sessionName, null, null, null, null, null, null, count, null);
+		// 		else
+		// 			dbi.updateSession(sessionName, null, null, null, null, null, null, null, count);
+		// 	}
+		// }
 
-		if (timeSlotName != null) {
-			if (!timeSlotName.equals("none")) {
-				if (radio.equals("beginning"))
-					dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, count, null,
-							null);
-				else if (radio.equals("middle"))
-					dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, null, count,
-							null);
-				else
-					dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, null, null,
-							count);
-			}
-		}
+		// if (roomName != null) {
+		// 	if (!roomName.equals("none")) {
+		// 		if (radio.equals("beginning"))
+		// 			dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, count, null, null);
+		// 		else if (radio.equals("middle"))
+		// 			dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, null, count, null);
+		// 		else
+		// 			dbi.updateSession(getSessionBasedOnRoom(roomName), null, null, null, null, null, null, null, count);
+		// 	}
+		// }
+
+		// if (timeSlotName != null) {
+		// 	if (!timeSlotName.equals("none")) {
+		// 		if (radio.equals("beginning"))
+		// 			dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, count, null,
+		// 					null);
+		// 		else if (radio.equals("middle"))
+		// 			dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, null, count,
+		// 					null);
+		// 		else
+		// 			dbi.updateSession(getSessionBasedOnTime(timeSlotName), null, null, null, null, null, null, null,
+		// 					count);
+		// 	}
+		// }
 
 		System.out.println(count);
 	}
