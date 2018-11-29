@@ -41,7 +41,11 @@ public class Query extends HttpServlet {
 		String sessionSelect = request.getParameter("sessionSelect");
 		String roomSelect = request.getParameter("roomSelect");
 		
+<<<<<<< HEAD
     	List<Session> queryResults = new List<Session>();
+=======
+		List<Session> queryResults = new List<Session>();
+>>>>>>> master
 		
 		if(button.equals("Submit")) {
 			if(sessionSelect != "") {

@@ -87,7 +87,11 @@ public class DatabaseInterface {
 		
 		return sessions;
 	}
+<<<<<<< HEAD
 }
+=======
+
+>>>>>>> master
 	public List<Session> getSessionsFromName(String query){
         List<Session> sessionList = getSessionList();
         List<Session> results = new List<Session>();
@@ -121,4 +125,8 @@ public class DatabaseInterface {
         }
         return results.get(0);
     }
+<<<<<<< HEAD
 }
+=======
+}S
+>>>>>>> master

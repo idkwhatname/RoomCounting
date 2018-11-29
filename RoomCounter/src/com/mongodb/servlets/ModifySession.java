@@ -42,7 +42,11 @@ public class ModifySession extends HttpServlet {
 		 String speakerName = request.getParameter("speaker");
 		 String linkedRoomID = request.getParameter("roomSelect");
 		 String linkedTimeID = request.getParameter("timeSlotSelect");
+<<<<<<< HEAD:RoomCounter/src/com/mongodb/servlets/ModifySession.java
 	 
+=======
+		 
+>>>>>>> master:RoomCounter/src/com/mongodb/servlets/ModifySession.java
 		 String button = request.getParameter("myButton");
 		 String sessionSelect = request.getParameter("sessionSelect");
 
@@ -71,6 +75,33 @@ public class ModifySession extends HttpServlet {
 			System.out.println(speakerName);
 			
 	        Database_Init_Interface dbi = new Database_Init_Interface();
+<<<<<<< HEAD:RoomCounter/src/com/mongodb/servlets/ModifySession.java
+=======
+			
+			if(button.equals("Submit")) {
+				//ADDING SESSION TO DATABASE
+
+		        dbi.pushSessionDocument(sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
+				
+			}else if(button.equals("delete")) {
+				if(sessionSelect != null) {
+					//DELETING SESSION FROM DATABASE
+					dbi.deleteSession(sessionSelect);	
+				}
+	
+			}else if(button.equals("modify")) {
+				if(sessionSelect != null && (sessionName != null || speakerName != null)) {
+				//MODIFY SESSION FROM DATABASE
+				
+				dbi.updateSession(sessionSelect, sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID, null, null, null);
+				}
+			}
+			
+			
+
+	        
+	        
+>>>>>>> master:RoomCounter/src/com/mongodb/servlets/ModifySession.java
 			
 			if(button.equals("Submit")) {
 				//ADDING SESSION TO DATABASE

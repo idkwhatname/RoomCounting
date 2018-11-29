@@ -57,6 +57,7 @@ public class ModifyRoom extends HttpServlet {
 			System.out.println(capacity);
 			
 			Database_Init_Interface dbi = new Database_Init_Interface();
+<<<<<<< HEAD:RoomCounter/src/com/mongodb/servlets/ModifyRoom.java
 
 			// This was deleted by Kevin's branch-- I've commented it out while resolving conflicts.
 			//dbi.pushRoomDocument(roomName, capacity);			
@@ -66,6 +67,14 @@ public class ModifyRoom extends HttpServlet {
 					//ADDING ROOM TO DATABASE
 					dbi.pushRoomDocument(roomName, capacity);
 				}
+=======
+			
+			//BUTTON IF STATEMENT
+			if(button.equals("Submit")) {
+				
+				//ADDING ROOM TO DATABASE
+				dbi.pushRoomDocument(roomName,"0", capacity);
+>>>>>>> master:RoomCounter/src/com/mongodb/servlets/ModifyRoom.java
 			}
 			else if(button.equals("delete")) {
 				if(roomSelect != null) {
@@ -80,6 +89,12 @@ public class ModifyRoom extends HttpServlet {
 				
 				}
 			}
+<<<<<<< HEAD:RoomCounter/src/com/mongodb/servlets/ModifyRoom.java
+=======
+			
+
+			
+>>>>>>> master:RoomCounter/src/com/mongodb/servlets/ModifyRoom.java
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
 			Util util = new Util(mongo, "Sessions");
 			List<Session> AllSessions = util.readAllSessions();
