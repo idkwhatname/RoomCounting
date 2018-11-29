@@ -12,11 +12,6 @@ import static com.mongodb.client.model.Projections.*;
 import com.mongodb.client.model.Sorts;
 import java.util.Arrays;
 import org.bson.Document;
-import com.mongodb.models.*;
-import com.mongodb.client.MongoCursor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DatabaseInterface {
 
@@ -31,62 +26,74 @@ public class DatabaseInterface {
 		this("localhost" , 27017);
 	}
 
-	public MongoDatabase getDB(){
-		return db;
-	}
-
 	private static MongoClient getConnection(String url , int port_num) {
         
         MongoClient mongoClntObj = new MongoClient(url, port_num);
         return mongoClntObj;
 	}
-	
-	public List<Room> getRoomList(){
 
+	/*
+	private Block<Document> printBlock = new Block<Document>() {
+		@Override
+		public void apply(final Document document) {
+			return document.toJson();
+		}
+ 	};
+	
+	public String getRoomJSON(){
 		MongoCollection<Document> collection = db.getCollection("Room");
-		List<Room> rooms = new ArrayList<Room>();
-		MongoCursor<Document> cursor = collection.find().iterator();
-		while(cursor.hasNext()) {
-			Document doc = cursor.next();
-			Room r = ModelConverter.toRoom(doc);
-			rooms.add(r);
-		}
-		
-		
-		return rooms;
-
+		return collection.find().forEach(printBlock);
 	}
 
 
-	public List<TimeSlot> getTimeSlotList() {
-		
+	// public int getRoomCapacity() {
+	// 	return 0;
+	// }
+
+	public String getTimeSlotJSON() {
 		MongoCollection<Document> collection = db.getCollection("TimeSlot");
-		List<TimeSlot> timeslots = new ArrayList<TimeSlot>();
-		MongoCursor<Document> cursor = collection.find().iterator();
-		while(cursor.hasNext()) {
-			Document doc = cursor.next();
-			TimeSlot t = ModelConverter.toTimeSlot(doc);
-			timeslots.add(t);
-		}
-		
-		
-		return timeslots;
+		return collection.find().forEach(printBlock);
 	}
 
-	public List<Session> getSessionList() {
-		
+	public String getSessionJSON() {
 		MongoCollection<Document> collection = db.getCollection("Session");
-		List<Session> sessions = new ArrayList<Session>();
-		MongoCursor<Document> cursor = collection.find().iterator();
-		while(cursor.hasNext()) {
-			Document doc = cursor.next();
-			Session s = ModelConverter.toSession(doc);
-			sessions.add(s);
-		}
-		
-		
-		return sessions;
+		return collection.find().forEach(printBlock);
 	}
 
-	
+	// public String getSessionName() {
+	// 	return "";
+	// }
+
+	// public int getSessionNumber() {
+	// 	return 0;
+	// }
+
+	// public String getSpeakerName() {
+	// 	return "";
+	// }
+
+	public boolean setRoomName() {
+		return false;
+	}
+
+	public boolean setRoomCapacity() {
+		return false;
+	}
+
+	public boolean setTimeSlot() {
+		return false;
+	}
+
+	public boolean setSessionName() {
+		return false;
+	}
+
+	public boolean setSessionNumber() {
+		return false;
+	}
+
+	public boolean setSpeakerName() {
+		return false;
+	}
+	*/
 }

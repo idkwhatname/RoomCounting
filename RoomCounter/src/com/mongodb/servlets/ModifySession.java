@@ -46,6 +46,14 @@ public class ModifySession extends HttpServlet {
 		 String button = request.getParameter("myButton");
 		 String sessionSelect = request.getParameter("sessionSelect");
 
+		 
+		if(sessionName == null || sessionID == null || speakerName == null) {
+			//error
+			System.out.println("Error adding, values null");
+			RequestDispatcher rd = getServletContext().getRequestDispatcher(
+					"/Creation Menu.jsp");
+			rd.forward(request, response);
+		}else {
 			
 			if(linkedRoomID == null) {
 				linkedRoomID = "";
@@ -66,12 +74,9 @@ public class ModifySession extends HttpServlet {
 			
 			if(button.equals("Submit")) {
 				//ADDING SESSION TO DATABASE
-				if(sessionName != "" && sessionID != "" && speakerName != "") {
 
-			        dbi.pushSessionDocument(sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
-					
-				}
-
+		        dbi.pushSessionDocument(sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
+				
 			}else if(button.equals("delete")) {
 				if(sessionSelect != null) {
 					//DELETING SESSION FROM DATABASE
@@ -79,11 +84,17 @@ public class ModifySession extends HttpServlet {
 				}
 	
 			}else if(button.equals("modify")) {
-				if(sessionSelect != null) {
+				if(sessionSelect != null && (sessionName != null || speakerName != null)) {
 				//MODIFY SESSION FROM DATABASE
-				dbi.updateSession(sessionSelect, sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID);
+				
+				dbi.updateSession(sessionSelect, sessionName, sessionID, speakerName, linkedRoomID, linkedTimeID, null, null, null);
 				}
-			}	        
+			}
+			
+			
+
+	        
+	        
 			
 			//GETTING ALL THE SESSIONS FROM THE DATBASE
 			Util util = new Util(mongo, "Sessions");
@@ -99,14 +110,21 @@ public class ModifySession extends HttpServlet {
 			List<Room> AllRooms = utilRoom.readAllRooms();
 
 			
-			//SHOWING THE LIST ON THE WEBSITE
+			//SHOWING THE LSIT ON THE WEBSITE
 			request.setAttribute("timeSlots", AllTimeSlots);
 			request.setAttribute("rooms", AllRooms);
 			request.setAttribute("sessions", AllSessions);
-	        	        
+	        
+	        
+
+			
+			
 			RequestDispatcher rd = getServletContext().getRequestDispatcher("/Creation Menu.jsp");
 			rd.forward(request, response);
-
+			
+		}
+		
+	
 	}
 
 }
