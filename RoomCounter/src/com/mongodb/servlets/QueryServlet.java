@@ -1,7 +1,6 @@
 package com.mongodb.servlets;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,17 +9,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
-
 import com.mongodb.DBInterface.Database_Init_Interface;
 import com.mongodb.client.MongoClient;
-import com.mongodb.models.Room;
-import com.mongodb.models.Session;
-import com.mongodb.models.TimeSlot;
-import com.mongodb.utilities.Util;
 
-@WebServlet("/")
-public class MainServlet extends HttpServlet {
+@WebServlet("/query")
+public class QueryServlet extends HttpServlet {
 	
 	/**
 	 * 
@@ -41,7 +34,7 @@ public class MainServlet extends HttpServlet {
 		request.setAttribute("rooms", dbi.getRoomList());
 		request.setAttribute("sessions", dbi.getSessionList());
 		
-		RequestDispatcher rd = getServletContext().getRequestDispatcher("/CreationMenu.jsp");
+		RequestDispatcher rd = getServletContext().getRequestDispatcher("/Query.jsp");
 		rd.forward(request, response);
 		
 	       
