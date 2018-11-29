@@ -12,6 +12,11 @@ import static com.mongodb.client.model.Projections.*;
 import com.mongodb.client.model.Sorts;
 import java.util.Arrays;
 import org.bson.Document;
+import com.mongodb.models.*;
+import com.mongodb.client.MongoCursor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseInterface {
 
@@ -26,74 +31,89 @@ public class DatabaseInterface {
 		this("localhost" , 27017);
 	}
 
-	protected static MongoClient getConnection(String url , int port_num) {
-        
+	protected static MongoClient getConnection(String url , int port_num) {        
         MongoClient mongoClntObj = new MongoClient(url, port_num);
         return mongoClntObj;
 	}
-
-	/*
-	private Block<Document> printBlock = new Block<Document>() {
-		@Override
-		public void apply(final Document document) {
-			return document.toJson();
-		}
- 	};
 	
-	public String getRoomJSON(){
+	public List<Room> getRoomList(){
+
 		MongoCollection<Document> collection = db.getCollection("Room");
-		return collection.find().forEach(printBlock);
+		List<Room> rooms = new ArrayList<Room>();
+		MongoCursor<Document> cursor = collection.find().iterator();
+		while(cursor.hasNext()) {
+			Document doc = cursor.next();
+			Room r = ModelConverter.toRoom(doc);
+			rooms.add(r);
+		}
+		
+		
+		return rooms;
+
 	}
 
 
-	// public int getRoomCapacity() {
-	// 	return 0;
-	// }
-
-	public String getTimeSlotJSON() {
+	public List<TimeSlot> getTimeSlotList() {
+		
 		MongoCollection<Document> collection = db.getCollection("TimeSlot");
-		return collection.find().forEach(printBlock);
+		List<TimeSlot> timeslots = new ArrayList<TimeSlot>();
+		MongoCursor<Document> cursor = collection.find().iterator();
+		while(cursor.hasNext()) {
+			Document doc = cursor.next();
+			TimeSlot t = ModelConverter.toTimeSlot(doc);
+			timeslots.add(t);
+		}
+		
+		
+		return timeslots;
 	}
 
-	public String getSessionJSON() {
+	public List<Session> getSessionList() {
+		
 		MongoCollection<Document> collection = db.getCollection("Session");
-		return collection.find().forEach(printBlock);
+		List<Session> sessions = new ArrayList<Session>();
+		MongoCursor<Document> cursor = collection.find().iterator();
+		while(cursor.hasNext()) {
+			Document doc = cursor.next();
+			Session s = ModelConverter.toSession(doc);
+			sessions.add(s);
+		}
+		
+		
+		return sessions;
 	}
 
-	// public String getSessionName() {
-	// 	return "";
-	// }
+	public List<Session> getSessionsFromName(String query){
+        List<Session> sessionList = getSessionList();
+        List<Session> results = new List<Session>();
+        for(int i = 0; i < sessionList.size(); i++){
+            if(sessionList.get(i).getSessionName().strip().equalsIgnoreCase(query)){
+                results.add(sessionList.get(i));
+            }
+        }
+        return results;
+    }
 
-	// public int getSessionNumber() {
-	// 	return 0;
-	// }
-
-	// public String getSpeakerName() {
-	// 	return "";
-	// }
-
-	public boolean setRoomName() {
-		return false;
+    public List<Session> getSessionsFromNumber(String query){
+        List<Session> sessionList = getSessionList();
+        List<Session> results = new List<Session>();
+        for(int i = 0; i < sessionList.size(); i++){
+            if(sessionList.get(i).getSessionNumber().strip().equalsIgnoreCase(query)){
+                results.add(sessionList.get(i));
+            }
+        }
+        return results;
 	}
-
-	public boolean setRoomCapacity() {
-		return false;
-	}
-
-	public boolean setTimeSlot() {
-		return false;
-	}
-
-	public boolean setSessionName() {
-		return false;
-	}
-
-	public boolean setSessionNumber() {
-		return false;
-	}
-
-	public boolean setSpeakerName() {
-		return false;
-	}
-	*/
+	
+	public List<Session> getSessionsFromRoomAndTime(String roomQuery , String timeQuery){
+        List<Session> sessionList = getSessionList();
+        List<Session> results = new List<Session>();
+        for(int i = 0; i < sessionList.size(); i++){
+            if(sessionList.get(i).getTimeSlot().strip().equalsIgnoreCase(timeQuery)
+            && sessionList.get(i).getRoom().strip().equalsIgnoreCase(roomQuery)){
+                results.add(sessionList.get(i));
+            }
+        }
+        return results;
+    }
 }
